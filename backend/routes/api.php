@@ -19,3 +19,4 @@ Route::get('/test', function (Request $request) {
     return response()->json(['message' => 'Hello, World!']);
 });
 Route::post('/register', [AuthenticationController::class, 'register']);
+Route::post('/login', [AuthenticationController::class, 'login']);
