@@ -63,7 +63,7 @@
 </div>
 </form>
 <p class=" text-center text-lg text-gray-900">
-             Déjà un compte ? <router-link to="/" class="text-primary-600 font-bold hover:text-primary-800">Connecte-toi</router-link>
+             Pas de compte ? <router-link to="/" class="text-primary-600 font-bold hover:text-primary-800">Inscris-toi</router-link>
           </p>
     </div>
   </div>

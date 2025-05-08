@@ -20,3 +20,7 @@ Route::get('/test', function (Request $request) {
 });
 Route::post('/register', [AuthenticationController::class, 'register']);
 Route::post('/login', [AuthenticationController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthenticationController::class, 'logout']);
+    // Add other protected routes here
+});

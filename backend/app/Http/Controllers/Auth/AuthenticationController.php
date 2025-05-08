@@ -19,6 +19,11 @@ class AuthenticationController extends Controller
      */
     public function login(Request $request)
     {
+       $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'message' => 'Login information is invalid.'
@@ -28,10 +33,12 @@ class AuthenticationController extends Controller
         $user = User::where('email', $request['email'])->firstOrFail();
         $token = $user->createToken('authToken')->plainTextToken;
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+            return response()->json([
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'user' => $user,
+            ]);
+
     }
 
     /**
@@ -97,6 +104,21 @@ class AuthenticationController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+        ]);
+    }
+
+    /**
+     * Logout the user and revoke the access token.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully.'
         ]);
     }
 }
