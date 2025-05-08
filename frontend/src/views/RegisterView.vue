@@ -91,6 +91,9 @@
     </button>
   </div>
 </form>
+<p class=" text-center text-lg text-gray-900">
+               Déjà un compte ? <router-link to="/login" class="text-primary-600 font-bold hover:text-primary-800">Connecte-toi</router-link>
+            </p>
       </div>
     </div>
   </template>
