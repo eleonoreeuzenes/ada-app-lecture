@@ -1,12 +1,13 @@
 // src/stores/auth.ts
 import { defineStore } from 'pinia'
 import api from '@/services/api'
-import { useRouter } from 'vue-router'
+import router from '@/router';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null as null | { id: number; username: string; email: string },
-    token: null as string | null,
+    user: null as null | { id: number; username: string; email: string, total_points: number }, 
+    token: localStorage.getItem('authToken'), // Retrieve token from localStorage
+    isAuthenticated: !!localStorage.getItem('authToken'), // Check if token exists
   }),
 
   actions: {
@@ -17,7 +18,7 @@ export const useAuthStore = defineStore('auth', {
         username,
         password,
       })
-      this.token = response.data.token
+      this.token = response.data.access_token
     },
 
     async login(email: string, password: string) {
@@ -25,7 +26,28 @@ export const useAuthStore = defineStore('auth', {
         email,
         password,
       })
-      this.token = response.data.token
+      this.token = response.data.access_token
+      this.user = response.data.user
+      this.isAuthenticated = true
+      localStorage.setItem('authToken', response.data.access_token)
+      console.log('Token after login:', this.token);
+      console.log('response:', response.data);
     },
+
+    async logout() {
+
+      console.log('Logging out...')
+      console.log('Token:', this.token)
+      await api.post('/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${this.token}`, 
+        },
+      });
+        this.token = null
+        this.user = null
+        this.isAuthenticated = false
+        localStorage.removeItem('authToken')
+        router.push('/login') 
+        }
   },
 })
