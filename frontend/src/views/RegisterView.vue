@@ -138,8 +138,18 @@ export default {
       try {
         await authStore.register(email.value, username.value, password.value);
         router.push('/about');
-      } catch (err) {
-        error.value = 'Erreur lors de l\'inscription. Veuillez réessayer.';
+      } catch (err: any) {
+    
+        const msg = err?.response?.data?.message
+
+        if (msg === 'Email already used.') {
+            error.value = 'Cet email est déjà utilisé.'
+        } else if (msg === 'Username already used.') {
+            error.value = 'Ce nom d’utilisateur est déjà pris.'
+        } else {
+            error.value = 'Une erreur est survenue.'
+        }
+
       } finally {
         isSubmitting.value = false;
       }
@@ -153,6 +163,7 @@ export default {
       error,
       isSubmitting,
       handleRegister,
+      authStore,
     };
   },
 };

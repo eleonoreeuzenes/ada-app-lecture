@@ -11,13 +11,13 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async register(email: string, username: string, password: string) {
+        
       const response = await api.post('/register', {
         email,
         username,
         password,
       })
       this.token = response.data.token
-      this.user = response.data.user
     },
 
     // async login(email: string, password: string) {
