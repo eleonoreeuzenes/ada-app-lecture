@@ -10,7 +10,16 @@ export const useBookStore = defineStore('book', {
       total_pages: number;
       genre_id: number;
       genre: { id: number; name: string };
-    }>, 
+    }>,
+    userbooks: [] as Array<{
+      id: number,
+      title: string,
+      author: string,
+      status: string,
+      pages_read: number,
+      total_pages: number,
+      genre: string,
+    }>, // User's books
     genres: [] as Array<{ id: number; name: string }>,
     isLoading: false, // Loading state for the search
     error: null as string | null, // Error message if the API call fails
@@ -18,57 +27,57 @@ export const useBookStore = defineStore('book', {
 
   actions: {
     async fetchGenres() {
-        this.isLoading = true;
-        this.error = null;
-        console.log('Fetching genres...');
-        try {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-              throw new Error('No authentication token found.');
-            }
-            console.log('Token:', token);
-            const response= await api.get('/genres', {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            this.genres = response.data;
-            console.log('Genres:', this.genres);
-          } catch (error: any) {
-            console.error('Error fetching genres:', error);
-            this.error = error.response?.data?.message || 'Erreur lors de la récupération des genres.';
-            throw error; 
-          } finally {
-            this.isLoading = false;
-          }
-      },
-
-      async createBook(bookData: {
-        title: string;
-        author: string;
-        total_pages: number;
-        genre_id: number;
-        status: string;
-        pages_read: number;
-      }) {
-        this.error = null;
-  
-        try {
-          const token = localStorage.getItem('authToken');
-          if (!token) {
-            throw new Error('No authentication token found.');
-          }
-  
-          await api.post('/user-books/full', bookData, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-        } catch (error: any) {
-          this.error = error.response?.data?.message || 'Erreur lors de la création du livre.';
-          throw error; 
+      this.isLoading = true;
+      this.error = null;
+      console.log('Fetching genres...');
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No authentication token found.');
         }
-      },
+        console.log('Token:', token);
+        const response = await api.get('/genres', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        this.genres = response.data;
+        console.log('Genres:', this.genres);
+      } catch (error: any) {
+        console.error('Error fetching genres:', error);
+        this.error = error.response?.data?.message || 'Erreur lors de la récupération des genres.';
+        throw error;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async createBook(bookData: {
+      title: string;
+      author: string;
+      total_pages: number;
+      genre_id: number;
+      status: string;
+      pages_read: number;
+    }) {
+      this.error = null;
+
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No authentication token found.');
+        }
+
+        await api.post('/user-books/full', bookData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error: any) {
+        this.error = error.response?.data?.message || 'Erreur lors de la création du livre.';
+        throw error;
+      }
+    },
 
     async searchBooks(title: string) {
       this.isLoading = true;
@@ -86,7 +95,7 @@ export const useBookStore = defineStore('book', {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },
         });
-
+        
         // Update the books state with the API response
         this.books = response.data.map((book: any) => ({
           id: book.id,
@@ -105,5 +114,42 @@ export const useBookStore = defineStore('book', {
         this.isLoading = false;
       }
     },
+    async fetchUserBooks() {
+      this.isLoading = true;
+      this.error = null;
+
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No authentication token found.');
+        }
+
+        const response = await api.get('/user-books', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        this.userbooks = response.data.map((userBook: any) => ({
+          id: userBook.id,
+          title: userBook.book.title,
+          author: userBook.book.author,
+          status: userBook.status,
+          pages_read: userBook.pages_read,
+          total_pages: userBook.book.total_pages,
+          genre: userBook.book.genre.name,
+        }));
+      } catch (error: any) {
+        this.error = error.response?.data?.message || 'Erreur lors de la récupération des livres.';
+      } finally {
+        this.isLoading = false;
+      }
+    }
   },
+  getters: {
+    getUserBookById: (state) => {
+      return (id: number) => state.userbooks.find(book => book.id === id)
+    }
+  }
+  
 });

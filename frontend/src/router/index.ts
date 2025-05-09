@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth'
 import AccountView from '@/views/AccountView.vue'
 import AddBookView from '@/views/AddBookView.vue'
 import CreateBookView from '@/views/CreateBookView.vue'
+import SingleBookView from '../views/SingleBookView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,13 @@ const router = createRouter({
       name: 'createbook',
       component: CreateBookView,
     },
+    {
+      path: '/books/:id',
+      name: 'SingleBookView',
+      component: SingleBookView,
+      props: true
+    }
+    
   ],
 })
 
