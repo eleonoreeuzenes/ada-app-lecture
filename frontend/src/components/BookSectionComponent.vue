@@ -18,6 +18,16 @@
         <p class="text-sm text-gray-600">Genre : {{ book.genre }}</p>
         <p class="text-sm text-gray-600">Pages : {{ book.pages_read }} / {{ book.total_pages }}</p>
         </RouterLink>
+        <!-- Progress Bar -->
+        <div class="mt-2">
+          <div class="w-full bg-gray-200 rounded-full h-4">
+            <div
+              class="bg-primary-600 h-4 rounded-full transition-all duration-500 ease-in-out"
+              :style="{ width: calculateProgress(book) + '%' }"
+            ></div>
+          </div>
+          <p class="text-sm mt-1 text-gray-600">{{ calculateProgress(book) }}% lu</p>
+        </div>
         </div>
         
       </div>
@@ -25,11 +35,27 @@
   </template>
   
   <script setup lang="ts">
-  import { RouterLink } from 'vue-router'
-
+  import { RouterLink } from 'vue-router';
+  
   defineProps<{
-    title: string
-    books: any[]
-  }>()
+    title: string;
+    books: Array<{
+      id: number;
+      title: string;
+      author: string;
+      genre: string;
+      pages_read: number;
+      total_pages: number;
+    }>;
+  }>();
+  
+  // Fonction pour calculer le pourcentage de progression
+  const calculateProgress = (book: {
+    pages_read: number;
+    total_pages: number;
+  }): number => {
+    if (book.total_pages === 0) return 0;
+    return Math.round((book.pages_read / book.total_pages) * 100);
+  };
   </script>
   

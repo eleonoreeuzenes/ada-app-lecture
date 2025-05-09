@@ -41,6 +41,13 @@ const updateProgress = async () => {
     })
   }
 };
+
+const progressPercentage = computed(() => {
+  if (book.value) {
+    return Math.round((book.value.pages_read / book.value.total_pages) * 100);
+  }
+  return '0';
+});
 </script>
 <template>
     <main class="container mx-auto px-4 py-8">
@@ -51,6 +58,18 @@ const updateProgress = async () => {
         <p>Genre : {{ book.genre }}</p>
         <p>Status : {{ book.status }}</p>
         <p>Pages lues : {{ book.pages_read }} / {{ book.total_pages }}</p>
+
+        <!-- Progress Bar -->
+      <div class="mt-4">
+        <label class="block font-semibold mb-1">Progression :</label>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+          <div
+            class="bg-primary-600 h-4 rounded-full transition-all duration-500 ease-in-out"
+            :style="{ width: progressPercentage + '%' }"
+          ></div>
+        </div>
+        <p class="text-sm mt-1">{{ progressPercentage }}% lu</p>
+      </div>
 
         <button
         v-if="book.status === 'to_read' || book.status === 'in_progress'"
