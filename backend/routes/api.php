@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\Auth\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,7 @@ Route::post('/register', [AuthenticationController::class, 'register']);
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthenticationController::class, 'logout']);
+    Route::patch('/me', [UserController::class, 'updateUser']);
+    Route::patch('/me/password', [AuthenticationController::class, 'resetPassword']);
     // Add other protected routes here
 });

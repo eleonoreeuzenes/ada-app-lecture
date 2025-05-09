@@ -121,4 +121,45 @@ class AuthenticationController extends Controller
             'message' => 'Logged out successfully.'
         ]);
     }
+
+    /**
+     * Reset the user's password.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resetPassword(Request $request)
+    {
+        /* TODO: Use token sent to email verification instead*/
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => [
+                'required',
+                'min:8',
+                'regex:/^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*$/',
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $user = $request->user();
+
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json([
+                'message' => 'The old password is incorrect.',
+            ], 400);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+            'message' => 'Password updated successfully.',
+        ]);
+    }
 }
