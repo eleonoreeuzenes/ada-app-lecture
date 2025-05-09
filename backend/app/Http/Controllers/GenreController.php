@@ -8,8 +8,7 @@ class GenreController extends Controller
 {
     public function index()
     {
-        $genres = Genre::all(['id', 'name']);
-        return response()->json($genres);
+        return response()->json(Genre::all());
     }
 }
 

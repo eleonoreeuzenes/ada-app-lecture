@@ -96,7 +96,7 @@ setup() {
 
     try {
       await authStore.login(email.value, password.value);
-      router.push('/about');
+      router.push('/');
     } catch (err: any) {
           error.value = 'Une erreur est survenue. Veuillez réessayer.';
     } finally {

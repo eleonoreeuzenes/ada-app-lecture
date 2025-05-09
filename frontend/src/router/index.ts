@@ -4,6 +4,8 @@ import RegisterView from '@/views/RegisterView.vue'
 import LoginView from '../views/LoginView.vue'
 import { useAuthStore } from '@/stores/auth'
 import AccountView from '@/views/AccountView.vue'
+import AddBookView from '@/views/AddBookView.vue'
+import CreateBookView from '@/views/CreateBookView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +29,16 @@ const router = createRouter({
       path: '/account',
       name: 'account',
       component: AccountView,
+    },
+    {
+      path: '/add',
+      name: 'addbook',
+      component: AddBookView,
+    },
+    {
+      path: '/create-book',
+      name: 'createbook',
+      component: CreateBookView,
     },
   ],
 })
