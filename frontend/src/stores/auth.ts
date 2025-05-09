@@ -6,8 +6,8 @@ import router from '@/router';
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null as null | { id: number; username: string; email: string, total_points: number }, 
-    token: localStorage.getItem('authToken'), // Retrieve token from localStorage
-    isAuthenticated: !!localStorage.getItem('authToken'), // Check if token exists
+    token: localStorage.getItem('authToken'), 
+    isAuthenticated: !!localStorage.getItem('authToken'), 
   }),
 
   actions: {
@@ -32,8 +32,30 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('authToken', response.data.access_token)
       console.log('Token after login:', this.token);
       console.log('response:', response.data);
+      console.log('User after login:', this.user);
     },
 
+    async updateUser(payload: { username: string; email: string; password?: string }) {
+      console.log('Payload being sent:', payload);
+      const response = await api.patch('/me', payload, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      });
+      this.user = response.data.user; // Update the user in the store
+    },
+
+    async updatePassword(payload: { old_password: string; new_password: string }) {
+      console.log('Payload being sent:', payload);
+      const response = await api.patch('/me/password', payload, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      });
+      console.log('Password update response:', response.data);
+
+    },
+    
     async logout() {
 
       console.log('Logging out...')
