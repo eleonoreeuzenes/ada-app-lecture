@@ -90,4 +90,32 @@ public function getUserBooks()
 
     return response()->json($userBooks);
 }
+
+public function update(Request $request, $id)
+{
+    $userBook = UserBook::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+    $validated = $request->validate([
+        'pages_read' => 'nullable|integer|min:0',
+        'status' => 'nullable|in:to_read,in_progress,finished',
+    ]);
+
+    if (isset($validated['pages_read'])) {
+        $userBook->pages_read = $validated['pages_read'];
+    }
+
+    if (isset($validated['status'])) {
+        $userBook->status = $validated['status'];
+    }
+
+    $userBook->save();
+
+    return response()->json([
+        'message' => 'Lecture mise à jour',
+        'user_book' => $userBook,
+    ]);
+}
+
 }
