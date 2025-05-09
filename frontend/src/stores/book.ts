@@ -144,6 +144,40 @@ export const useBookStore = defineStore('book', {
       } finally {
         this.isLoading = false;
       }
+    },
+    async updateUserBook(updatedBook: {
+      id: number;
+      status: string;
+      pages_read: number;
+    }) {
+      this.isLoading = true;
+      this.error = null;
+    
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No authentication token found.');
+        }
+    
+        await api.patch(`/user-books/${updatedBook.id}`, {
+          status: updatedBook.status,
+          pages_read: updatedBook.pages_read,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        const bookIndex = this.userbooks.findIndex((book) => book.id === updatedBook.id);
+        if (bookIndex !== -1) {
+          this.userbooks[bookIndex].status = updatedBook.status;
+          this.userbooks[bookIndex].pages_read = updatedBook.pages_read;
+        }
+      } catch (error: any) {
+        this.error = error.response?.data?.message || 'Erreur lors de la mise à jour du livre.';
+      } finally {
+        this.isLoading = false;
+      }
     }
   },
   getters: {

@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user-books', [UserBookController::class, 'store']);
     Route::post('/user-books/full', [UserBookController::class, 'storeFull']);
     Route::get('/user-books', [UserBookController::class, 'getUserBooks']);
+    Route::patch('/user-books/{userBook}', [UserBookController::class, 'update']);
 
     //genres
     Route::post('/genres', [GenreController::class, 'store']);
