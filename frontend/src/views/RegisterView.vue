@@ -140,7 +140,7 @@ export default {
 
       try {
         await authStore.register(email.value, username.value, password.value);
-        router.push('/about');
+        router.push('/');
       } catch (err: any) {
     
         const msg = err?.response?.data?.message
