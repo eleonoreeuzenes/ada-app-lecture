@@ -85,9 +85,9 @@ class AuthenticationControllerTest extends TestCase
             'password' => 'Password:123',
         ]);
 
-        $response->assertStatus(400)
+        $response->assertStatus(422)
             ->assertJson([
-                'message' => 'Email format is invalid.',
+                'message' => 'The email field is required.',
             ]);
     }
 
