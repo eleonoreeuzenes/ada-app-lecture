@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useBookStore } from '@/stores/book'
 const route = useRoute()
@@ -11,6 +11,14 @@ console.log('userbookId', userbookId)
 const book = computed(() => bookStore.getUserBookById(userbookId))
 console.log('book', book)
 
+const pagesInput = ref(0)
+
+watch(book, (val) => {
+  if (val) {
+    pagesInput.value = val.pages_read 
+  }
+})
+
 const markAsRead = async () => {
   if (book.value) {
     await bookStore.updateUserBook({
@@ -18,6 +26,19 @@ const markAsRead = async () => {
       status: 'finished',
       pages_read: book.value.total_pages,
     });
+  }
+};
+
+const updateProgress = async () => {
+  if (book.value) {
+    if (book.value.status === 'to_read') {
+      book.value.status = 'in_progress'
+    }
+    await bookStore.updateUserBook({
+      id: book.value.id,
+      status: book.value.status,
+      pages_read: pagesInput.value,
+    })
   }
 };
 </script>
@@ -38,6 +59,23 @@ const markAsRead = async () => {
       >
         Marquer comme lu
       </button>
+      <div v-if="book.status === 'to_read' || book.status === 'in_progress'" class="mt-4">
+        <label for="pagesInput" class="block font-semibold mb-1">Mettre à jour les pages lues :</label>
+        <input
+          id="pagesInput"
+          v-model="pagesInput"
+          type="number"
+          :max="book.total_pages"
+          :min="0"
+          class="border rounded px-2 py-1 w-24"
+        />
+        <button
+          @click="updateProgress"
+          class="ml-2 bg-secondary-300 text-gray-700 px-3 py-1 rounded hover:bg-secondary-200"
+        >
+          Enregistrer
+        </button>
+      </div>
       </div>
     </main>
   </template>
