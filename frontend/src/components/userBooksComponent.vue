@@ -25,7 +25,9 @@
   const bookStore = useBookStore();
   
   onMounted(async () => {
-    await bookStore.fetchUserBooks();
+    if (bookStore.userbooks.length === 0) {
+      await bookStore.fetchUserBooks();
+    }
   });
 
   const toReadBooks = computed(() =>

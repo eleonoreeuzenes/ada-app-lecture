@@ -17,27 +17,23 @@ const form = ref({
   pages_read: 0,
 });
 
-// Variables pour les messages
 const message = ref('');
 const messageType = ref<'success' | 'error' | ''>('');
 
-// Fonction pour créer un livre
 const createBook = async () => {
   try {
     await bookStore.createBook(form.value);
     message.value = 'Livre créé avec succès !';
     messageType.value = 'success';
-    router.push({ name: 'home' }); // Redirection après succès
+    router.push({ name: 'home' }); 
   } catch (error) {
     message.value = bookStore.error || 'Une erreur est survenue lors de la création du livre.';
     messageType.value = 'error';
   }
 };
 
-// Calcul pour afficher "Pages lues" uniquement si le statut est "En cours"
 const showPagesRead = computed(() => form.value.status === 'in_progress');
 
-// Surveiller les changements de statut
 watch(
   () => form.value.status,
   (newStatus) => {
@@ -49,9 +45,10 @@ watch(
   }
 );
 
-// Récupérer les genres au montage du composant
 onMounted(async () => {
-  await bookStore.fetchGenres();
+  if (bookStore.genres.length === 0) {
+    await bookStore.fetchGenres();
+  }
 });
 </script>
 
