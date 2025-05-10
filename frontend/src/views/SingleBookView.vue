@@ -2,8 +2,12 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useBookStore } from '@/stores/book'
+import { useToast } from 'vue-toastification'
+import { useAuthStore } from '@/stores/auth'
+const toast = useToast()
 const route = useRoute()
 const bookStore = useBookStore()
+const authStore = useAuthStore()
 
 const userbookId = Number(route.params.id)
 console.log('userbookId', userbookId)
@@ -20,14 +24,33 @@ watch(book, (val) => {
 })
 
 const markAsRead = async () => {
-  if (book.value) {
-    await bookStore.updateUserBook({
-      id: book.value.id,
-      status: 'finished',
-      pages_read: book.value.total_pages,
-    });
+  if (!book.value) return
+
+  let UserTotalPoints = 0;
+  if (authStore.user) {
+    UserTotalPoints = authStore.user.total_points;
   }
-};
+  
+  const response = await bookStore.updateUserBook({
+    id: book.value.id,
+    status: 'finished',
+    pages_read: book.value.total_pages,
+  })
+
+  if (response?.total_points && authStore.user) {
+    console.log('UserTotalPoints', UserTotalPoints);
+    console.log('response.total_points', response.total_points);
+    const pointsGained = response.total_points - UserTotalPoints;
+    authStore.user.total_points = response.total_points;
+    console.log('pointsGained', pointsGained);
+
+    if (pointsGained > 0) {
+      toast.success(`🎉 Bravo ! Tu as gagné ${pointsGained} points !`, {
+        timeout: 2000
+      });
+    }
+  }
+}
 
 const updateProgress = async () => {
   if (book.value) {
@@ -48,6 +71,8 @@ const progressPercentage = computed(() => {
   }
   return '0';
 });
+
+
 </script>
 <template>
     <main class="container mx-auto px-4 py-8">

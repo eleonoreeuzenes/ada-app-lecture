@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthenticationController::class, 'logout']);
     Route::patch('/me', [UserController::class, 'updateUser']);
     Route::patch('/me/password', [AuthenticationController::class, 'resetPassword']);
+    Route::get('/me', [UserController::class, 'getCurrentUser']);
 
     //books
     Route::post('/books', [BookController::class, 'store']);

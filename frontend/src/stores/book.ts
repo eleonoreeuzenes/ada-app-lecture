@@ -159,7 +159,7 @@ export const useBookStore = defineStore('book', {
           throw new Error('No authentication token found.');
         }
     
-        await api.patch(`/user-books/${updatedBook.id}`, {
+        const response = await api.patch(`/user-books/${updatedBook.id}`, {
           status: updatedBook.status,
           pages_read: updatedBook.pages_read,
         }, {
@@ -173,6 +173,8 @@ export const useBookStore = defineStore('book', {
           this.userbooks[bookIndex].status = updatedBook.status;
           this.userbooks[bookIndex].pages_read = updatedBook.pages_read;
         }
+        console.log('Book updated:', response.data);
+        return response.data
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Erreur lors de la mise à jour du livre.';
       } finally {

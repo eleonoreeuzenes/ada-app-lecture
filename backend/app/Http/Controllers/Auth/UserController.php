@@ -37,4 +37,17 @@ class UserController extends Controller
 
         return response()->json($user);
     }
+
+    /**
+     * Get the authenticated user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCurrentUser(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json($user);
+    }
 }

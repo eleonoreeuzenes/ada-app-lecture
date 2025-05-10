@@ -77,6 +77,7 @@ public function storeFull(Request $request, ReadingService $readingService)
         'message' => 'Livre et lecture ajoutés avec succès ✅',
         'book' => $book,
         'user_book' => $userBook,
+        'total_points' => Auth::user()->total_points,
     ], 201);
 }
 
@@ -91,7 +92,7 @@ public function getUserBooks()
     return response()->json($userBooks);
 }
 
-public function update(Request $request, $id)
+public function update(Request $request, $id, ReadingService $readingService)
 {
     $userBook = UserBook::where('id', $id)
         ->where('user_id', Auth::id())
@@ -102,12 +103,18 @@ public function update(Request $request, $id)
         'status' => 'nullable|in:to_read,in_progress,finished',
     ]);
 
+    $oldStatus = $userBook->status;
+
     if (isset($validated['pages_read'])) {
         $userBook->pages_read = $validated['pages_read'];
     }
 
     if (isset($validated['status'])) {
         $userBook->status = $validated['status'];
+
+        if ($oldStatus !== 'finished' && $validated['status'] === 'finished') {
+            $readingService->assignPoints(Auth::id(), $userBook->book->total_pages);
+        }
     }
 
     $userBook->save();
@@ -115,6 +122,7 @@ public function update(Request $request, $id)
     return response()->json([
         'message' => 'Lecture mise à jour',
         'user_book' => $userBook,
+        'total_points' => Auth::user()->total_points,
     ]);
 }
 
