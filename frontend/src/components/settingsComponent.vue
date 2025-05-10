@@ -188,7 +188,7 @@ const deleteAccount = async () => {
         </button>
         <button
           @click="confirmDelete"
-          class="text-red-600 font-bold mt-6 hover:underline"
+          class="text-red-600 font-bold mt-4 text-lg hover:text-red-800"
         >
           Supprimer mon compte
         </button>

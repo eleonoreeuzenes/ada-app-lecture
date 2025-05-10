@@ -35,8 +35,8 @@ const addToLibrary = async (book: {
 <template>
   <main>
     <!-- Full-Width Section -->
-    <section class="w-full bg-secondary-300 py-8 rounded-b-3xl">
-      <div class="container mx-auto px-4">
+    <section class="w-full bg-secondary-200 py-8 rounded-b-3xl">
+      <div class="container lg:w-1/3 mx-auto px-4">
         <h2 class="text-lg font-bold text-gray-800 mb-2">Rechercher un livre</h2>
         <!-- Search Bar -->
         <div class="relative w-full max-w-lg">
@@ -52,7 +52,7 @@ const addToLibrary = async (book: {
       </div>
     </section>
 
-    <section class="container mx-auto px-4 mt-8">
+    <section class="container mx-auto lg:w-1/3 lg: px-4 mt-8">
       <h3 class="text-lg font-bold text-gray-800 mb-4">Résultats de recherche</h3>
       <div v-if="bookStore.isLoading" class="text-tertiary-500">Chargement...</div>
       <div v-else-if="bookStore.error" class="text-red-500">{{ bookStore.error }}</div>

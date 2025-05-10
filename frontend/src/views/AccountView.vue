@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-secondary-100 rounded-b-2xl p-6 relative">
+  <section class="bg-secondary-200 rounded-b-2xl py-6 px-6 md:px-96 relative">
     <!-- Header : Nom + Badge + Réglages -->
     <div class="flex justify-between items-start">
       <!-- Infos utilisateur -->
