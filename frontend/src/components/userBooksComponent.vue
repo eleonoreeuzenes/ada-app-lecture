@@ -1,13 +1,12 @@
 <template>
-    <main class="container mx-auto px-4 py-8">
-      <h1 class="text-2xl font-bold mb-6">Ma bibliothèque</h1>
+    <main class="container mx-auto py-8">
+      <h1 class="text-2xl font-bold px-4 mb-6">Ma bibliothèque</h1>
   
-      <div v-if="bookStore.isLoading" class="text-gray-500">Chargement...</div>
-      <div v-else-if="bookStore.error" class="text-red-500">{{ bookStore.error }}</div>
+      <div v-if="bookStore.isLoading" class="text-tertiary-500 px-4">Chargement...</div>
+      <div v-else-if="bookStore.error" class="text-red-500 px-4">{{ bookStore.error }}</div>
       <div v-else>
-        <div v-if="bookStore.userbooks.length === 0" class="text-gray-500">Aucun livre ajouté.</div>
-  
-        <div v-else class="space-y-10">
+        <div v-if="bookStore.userbooks.length === 0" class="text-tertiary-500 px-4 ">Aucun livre ajouté.</div>
+        <div v-else class="space-y-8">
           <BookSection title="À lire" :books="toReadBooks" />
           <BookSection title="En cours" :books="inProgressBooks" />
           <BookSection title="Terminés" :books="finishedBooks" />
@@ -22,7 +21,7 @@
   import { useBookStore } from '@/stores/book';
   import BookSection from '@/components/BookSectionComponent.vue'
 
-  
+  console.log('BookStore userbooks', useBookStore().userbooks)
   const bookStore = useBookStore();
   
   onMounted(async () => {

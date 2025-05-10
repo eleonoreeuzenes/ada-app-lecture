@@ -34,25 +34,41 @@ const route = useRoute();
 </div>
   <RouterView />
 
-  <div v-if="!['register', 'login'].includes((route.name as string) ?? '')" class="fixed lg:hidden bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-2">
-      <div class="flex justify-around">
-        <router-link to="/" class="flex flex-col items-center px-1 py-2 text-primary-900" :class="{ 'bg-primary-200 rounded ': $route.path === '/' }">
-          <i class="fas fa-book text-xl"></i>
-          <span class="text-xs">Mes livres</span>
-        </router-link>
-        <router-link to="/add" class="flex flex-col items-center px-1 py-2 text-primary-900" :class="{ 'bg-primary-200 rounded ': $route.path === '/add' }">
-          <i class="fas fa-plus text-xl"></i>
-          <span class="text-xs">Ajouter un livre</span>
-        </router-link>
-        <router-link to="/badge" class="flex flex-col items-center px-1 py-2 text-primary-900" :class="{ 'bg-primary-200 rounded ': $route.path === '/trophy' }">
-          <i class="fas fa-trophy text-xl"></i>
-          <span class="text-xs">Mes badges</span>
-        </router-link>
-        <router-link to="/account" class="flex flex-col items-center px-1 py-2 text-primary-900" :class="{ 'bg-primary-200 rounded ': $route.path === '/account' }">
-          <i class="fas fa-user text-xl"></i>
-          <span class="text-xs">Mon profil</span>
-        </router-link>
-      </div>
+  <div v-if="!['register', 'login'].includes((route.name as string) ?? '')" class="fixed lg:hidden bottom-0 left-0 right-0 bg-tertiary-950 border-t border-gray-200 py-1">
+    <div class="flex justify-around">
+      <router-link
+        to="/"
+        class="flex flex-col items-center px-1 py-2"
+        :class="$route.path === '/' ? 'text-tertiary-50' : 'text-tertiary-500'"
+      >
+        <i class="fas fa-book text-xl"></i>
+        <span class="text-xs mt-1">Mes livres</span>
+      </router-link>
+      <router-link
+        to="/add"
+        class="flex flex-col items-center px-1 py-2"
+        :class="$route.path === '/add' ? 'text-tertiary-50' : 'text-tertiary-500'"
+      >
+        <i class="fas fa-plus text-xl"></i>
+        <span class="text-xs mt-1">Ajouter un livre</span>
+      </router-link>
+      <router-link
+        to="/badge"
+        class="flex flex-col items-center px-1 py-2"
+        :class="$route.path === '/badge' ? 'text-tertiary-50' : 'text-tertiary-500'"
+      >
+        <i class="fas fa-trophy text-xl"></i>
+        <span class="text-xs mt-1">Mes badges</span>
+      </router-link>
+      <router-link
+        to="/account"
+        class="flex flex-col items-center px-1 py-2"
+        :class="$route.path === '/account' ? 'text-tertiary-50' : 'text-tertiary-500'"
+      >
+        <i class="fas fa-user text-xl"></i>
+        <span class="text-xs mt-1">Mon profil</span>
+      </router-link>
     </div>
+  </div>
 </template>
 

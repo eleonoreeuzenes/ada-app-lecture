@@ -180,6 +180,30 @@ export const useBookStore = defineStore('book', {
       } finally {
         this.isLoading = false;
       }
+    },
+    async addBookToLibrary(payload: { book_id: number; status: string; pages_read: number }) {
+      this.isLoading = true;
+      this.error = null;
+    
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No authentication token found.');
+        }
+    
+        await api.post('/user-books', payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        // Optionally, fetch the user's library again to update the UI
+        await this.fetchUserBooks();
+      } catch (error: any) {
+        this.error = error.response?.data?.message || 'Erreur lors de l\'ajout du livre.';
+      } finally {
+        this.isLoading = false;
+      }
     }
   },
   getters: {
