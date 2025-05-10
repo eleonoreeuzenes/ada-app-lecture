@@ -9,25 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('user_books', function (Blueprint $table) {
+        Schema::create('user_badges', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('book_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['to_read', 'in_progress', 'finished']);
-            $table->integer('pages_read')->default(0);
-            $table->timestamp('started_at')->nullable();
-            $table->timestamp('finished_at')->nullable();
+            $table->foreignId('badge_id')->constrained()->onDelete('cascade');
+            $table->timestamp('unlocked_at');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_books');
+        Schema::dropIfExists('user_badges');
     }
 };

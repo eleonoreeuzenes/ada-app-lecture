@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\UserBookController;
+use App\Http\Controllers\UserBadgeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/me', [UserController::class, 'updateUser']);
     Route::patch('/me/password', [AuthenticationController::class, 'resetPassword']);
     Route::get('/me', [UserController::class, 'getCurrentUser']);
+    Route::get('/me/badges', [UserBadgeController::class, 'index']);
 
     //books
     Route::post('/books', [BookController::class, 'store']);

@@ -43,4 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class, 'user_badges')
+            ->withPivot('unlocked_at')
+            ->withTimestamps();
+    }
+
 }
