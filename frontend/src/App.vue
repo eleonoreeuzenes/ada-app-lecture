@@ -20,7 +20,7 @@ const route = useRoute();
             <i class="fas fa-plus mr-1"></i>
             <span>Ajouter un livre</span>
           </router-link>
-          <router-link to="/trophies" class="flex items-center py-1 px-2 text-primary-900" :class="{ 'bg-primary-200 rounded ': $route.path === '/trophies' }">
+          <router-link to="/badge" class="flex items-center py-1 px-2 text-primary-900" :class="{ 'bg-primary-200 rounded ': $route.path === '/badge' }">
             <i class="fas fa-trophy mr-1"></i>
             <span>Mes badges</span>
           </router-link>
@@ -44,7 +44,7 @@ const route = useRoute();
           <i class="fas fa-plus text-xl"></i>
           <span class="text-xs">Ajouter un livre</span>
         </router-link>
-        <router-link to="/trophies" class="flex flex-col items-center px-1 py-2 text-primary-900" :class="{ 'bg-primary-200 rounded ': $route.path === '/trophy' }">
+        <router-link to="/badge" class="flex flex-col items-center px-1 py-2 text-primary-900" :class="{ 'bg-primary-200 rounded ': $route.path === '/trophy' }">
           <i class="fas fa-trophy text-xl"></i>
           <span class="text-xs">Mes badges</span>
         </router-link>
