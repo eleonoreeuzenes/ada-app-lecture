@@ -73,6 +73,7 @@ export const useBookStore = defineStore('book', {
             Authorization: `Bearer ${token}`,
           },
         });
+        this.fetchUserBooks();
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Erreur lors de la création du livre.';
         throw error;
@@ -174,6 +175,7 @@ export const useBookStore = defineStore('book', {
           this.userbooks[bookIndex].pages_read = updatedBook.pages_read;
         }
         console.log('Book updated:', response.data);
+        this.fetchUserBooks();
         return response.data
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Erreur lors de la mise à jour du livre.';

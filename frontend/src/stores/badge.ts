@@ -23,7 +23,7 @@ export const useBadgeStore = defineStore('badge', {
         if (!token) {
           throw new Error('No authentication token found.');
         }
-
+        console.log('Fetching badges...');
         const response = await api.get('/me/badges', {
           headers: {
             Authorization: `Bearer ${token}`,

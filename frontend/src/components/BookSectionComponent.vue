@@ -6,7 +6,7 @@
         v-for="book in books"
         :key="book.id"
         :book="book"
-        :showProgress="true"
+        :isInLibrary="true"
       />
     </div>
   </section>

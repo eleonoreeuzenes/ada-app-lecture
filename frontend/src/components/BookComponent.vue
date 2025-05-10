@@ -12,7 +12,15 @@
 
     <!-- Progress Bar or Add Button -->
     <div class="mt-6">
-      <template v-if="showProgress">
+      <template v-if="!isInLibrary">
+        <button
+          @click="$emit('addToLibrary', book)"
+          class="mt-4 bg-primary-500 text-white px-4 py-2 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+        >
+          Ajouter à mes lectures
+        </button>
+      </template>
+      <template v-else>
         <p class="text-sm text-tertiary-900">{{ book.pages_read }}/{{ book.total_pages }} pages</p>
         <div class="w-full bg-white rounded-full h-2 mt-1">
           <div
@@ -20,14 +28,6 @@
             :style="{ width: calculateProgress(book) + '%' }"
           ></div>
         </div>
-      </template>
-      <template v-else>
-        <button
-          @click="$emit('addToLibrary', book)"
-          class="mt-4 bg-primary-500 text-white px-4 py-2 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-        >
-          Ajouter à mes lectures
-        </button>
       </template>
     </div>
   </div>
@@ -45,11 +45,10 @@ defineProps<{
     pages_read: number;
     total_pages: number;
   };
-  showProgress: boolean; // Prop to toggle between progress bar and add button
+  isInLibrary: boolean; 
 }>();
 
 defineEmits(['addToLibrary']);
-
 // Function to calculate the progress percentage
 const calculateProgress = (book: { pages_read: number; total_pages: number }): number => {
   if (book.total_pages === 0) return 0;

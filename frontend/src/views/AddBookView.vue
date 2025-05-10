@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, onBeforeUnmount} from 'vue';
 import { useBookStore } from '@/stores/book';
 import { useRouter } from 'vue-router';
 import BookComponent from '@/components/BookComponent.vue';
@@ -8,15 +8,16 @@ const searchQuery = ref('');
 const bookStore = useBookStore();
 const router = useRouter();
 
+const userBooks = computed(() => bookStore.userbooks);
+
 const searchBooks = async () => {
   await bookStore.searchBooks(searchQuery.value);
 };
 
 const goToCreateBook = () => {
-  router.push({ name: 'createbook' }); // Redirect to the "Create Book" view
+  router.push({ name: 'createbook' }); 
 };
 
-// Méthode pour ajouter un livre à la bibliothèque
 const addToLibrary = async (book: {
   id: number;
   title: string;
@@ -30,21 +31,30 @@ const addToLibrary = async (book: {
     pages_read: 0,
   });
 };
+
+const isInLibrary = (bookId: number) => {
+  return userBooks.value.some((userBook) => userBook.id === bookId);
+};
+
+onBeforeUnmount(() => {
+  searchQuery.value = '';
+  bookStore.books = [];
+});
 </script>
 
 <template>
   <main>
     <!-- Full-Width Section -->
-    <section class="w-full bg-secondary-200 py-8 rounded-b-3xl">
+    <section class="w-full bg-secondary-200 py-6 rounded-b-3xl">
       <div class="container lg:w-1/3 mx-auto px-4">
-        <h2 class="text-lg font-bold text-gray-800 mb-2">Rechercher un livre</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Rechercher un livre </h2>
         <!-- Search Bar -->
         <div class="relative w-full max-w-lg">
           <input
             type="text"
             v-model="searchQuery"
             placeholder="Rechercher un livre..."
-            class="w-full px-4 py-2 pl-10 border bg-white border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+            class="w-full px-4 py-2 pl-10 border bg-white border-gray-300 rounded-full shadow-sm focus:ring-primary-500 focus:border-primary-500"
             @keyup.enter="searchBooks"
           />
           <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
@@ -52,7 +62,7 @@ const addToLibrary = async (book: {
       </div>
     </section>
 
-    <section class="container mx-auto lg:w-1/3 lg: px-4 mt-8">
+    <section class="container mx-auto lg:w-1/3 lg: px-4 mt-4">
       <h3 class="text-lg font-bold text-gray-800 mb-4">Résultats de recherche</h3>
       <div v-if="bookStore.isLoading" class="text-tertiary-500">Chargement...</div>
       <div v-else-if="bookStore.error" class="text-red-500">{{ bookStore.error }}</div>
@@ -66,7 +76,7 @@ const addToLibrary = async (book: {
             v-for="book in bookStore.books"
             :key="book.id"
             :book="{ ...book, genre: book.genre.name, pages_read: 0 }"
-            :showProgress="false"
+            :isInLibrary="isInLibrary(book.id)" 
             @addToLibrary="addToLibrary"
           />
         </div>
@@ -76,7 +86,7 @@ const addToLibrary = async (book: {
       <div class="mt-4">
         <button
           @click="goToCreateBook"
-          class="bg-primary-500 w-full text-white px-4 py-2 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          class="bg-primary-500 w-full text-white px-4 py-2 rounded-md hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
         >
           Créer un livre
         </button>
