@@ -85,7 +85,7 @@ const deleteAccount = async () => {
 <template>
   <!-- Settings Icon -->
   <div class="relative">
-    <button @click="toggleSettings" class="text-secondary-400 hover:text-gray-900">
+    <button @click="toggleSettings" class="text-secondary-600 hover:text-gray-900">
       <i class="fas fa-cog text-3xl lg:text-2xl"></i>
     </button>
 

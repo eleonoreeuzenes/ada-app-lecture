@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useBookStore } from '@/stores/book';
 import { useRouter } from 'vue-router';
+import BookComponent from '@/components/BookComponent.vue';
 
 const searchQuery = ref('');
 const bookStore = useBookStore();
@@ -13,6 +14,21 @@ const searchBooks = async () => {
 
 const goToCreateBook = () => {
   router.push({ name: 'createbook' }); // Redirect to the "Create Book" view
+};
+
+// Méthode pour ajouter un livre à la bibliothèque
+const addToLibrary = async (book: {
+  id: number;
+  title: string;
+  author: string;
+  total_pages: number;
+  genre: { id: number; name: string };
+}) => {
+  await bookStore.addBookToLibrary({
+    book_id: book.id,
+    status: 'to_read',
+    pages_read: 0,
+  });
 };
 </script>
 
@@ -38,25 +54,22 @@ const goToCreateBook = () => {
 
     <section class="container mx-auto px-4 mt-8">
       <h3 class="text-lg font-bold text-gray-800 mb-4">Résultats de recherche</h3>
-      <div v-if="bookStore.isLoading" class="text-gray-500">Chargement...</div>
+      <div v-if="bookStore.isLoading" class="text-tertiary-500">Chargement...</div>
       <div v-else-if="bookStore.error" class="text-red-500">{{ bookStore.error }}</div>
       <div v-else>
         <!-- Message if no results -->
-        <div v-if="bookStore.books.length === 0" class="text-gray-500">Aucun résultat</div>
+        <div v-if="bookStore.books.length === 0" class="text-tertiary-500">Aucun résultat</div>
 
         <!-- List of books -->
-        <ul v-else>
-          <li
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <BookComponent
             v-for="book in bookStore.books"
             :key="book.id"
-            class="border-b py-2"
-          >
-            <h4 class="font-bold">{{ book.title }}</h4>
-            <p>Auteur : {{ book.author }}</p>
-            <p>Pages : {{ book.total_pages }}</p>
-            <p>Genre : {{ book.genre.name }}</p>
-          </li>
-        </ul>
+            :book="{ ...book, genre: book.genre.name, pages_read: 0 }"
+            :showProgress="false"
+            @addToLibrary="addToLibrary"
+          />
+        </div>
       </div>
 
       <!-- Button to create a new book -->

@@ -46,7 +46,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue'
-import SettingsComponent from '@/components/settingsComponent.vue';
+import SettingsComponent from '@/components/SettingsComponent.vue';
 
 const user = {
   username: 'booklad',

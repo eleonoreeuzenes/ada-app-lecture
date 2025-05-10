@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import userBooksComponent from '@/components/userBooksComponent.vue';
+import userBooksComponent from '@/components/UserBooksComponent.vue';
 </script>
 
 <template>
