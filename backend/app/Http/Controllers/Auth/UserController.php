@@ -50,4 +50,30 @@ class UserController extends Controller
 
         return response()->json($user);
     }
+
+    /**
+     * Delete the authenticated user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteUser(Request $request)
+    {
+        $user = $request->user();
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Mot de passe incorrect'], 403);
+        }
+
+        $user->tokens()->delete();
+
+        $user->delete();
+
+        return response()->json([
+            'message' => 'User deleted successfully.',
+        ]);
+    }
 }

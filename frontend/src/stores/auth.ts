@@ -96,8 +96,25 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = false
         localStorage.removeItem('authToken')
         router.push('/login') 
-        }
+        },
+
+      async deleteAccount(password: string) {
+          const token = this.token
+          if (!token) throw new Error('Not authenticated')
+        
+          await api.delete('/me', {
+            headers: { Authorization: `Bearer ${token}` },
+            data: { password }, 
+          })
+        
+          this.token = null
+          this.user = null
+          this.isAuthenticated = false
+          localStorage.removeItem('authToken')
+          router.push('/register')
+        },
   },
+
   getters: {
     userLevel: (state) => {
       console.log('Calculating user level...')

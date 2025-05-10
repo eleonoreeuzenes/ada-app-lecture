@@ -62,6 +62,24 @@ const handleChangePassword = async () => {
 const handleLogout = () => {
   authStore.logout(); // Trigger the logout action
 };
+
+const showDeleteConfirm = ref(false);
+const deletePassword = ref('');
+const deleteError = ref('');
+
+const confirmDelete = () => {
+  showDeleteConfirm.value = true;
+  deletePassword.value = '';
+  deleteError.value = '';
+};
+
+const deleteAccount = async () => {
+  try {
+    await authStore.deleteAccount(deletePassword.value);
+  } catch (error: any) {
+    deleteError.value = error?.response?.data?.message || 'Erreur lors de la suppression';
+  }
+};
 </script>
 
 <template>
@@ -169,6 +187,12 @@ const handleLogout = () => {
           Se déconnecter
         </button>
         <button
+          @click="confirmDelete"
+          class="text-red-600 font-bold mt-6 hover:underline"
+        >
+          Supprimer mon compte
+        </button>
+        <button
           @click="toggleSettings"
           class="text-primary-600 text-2xl top-4 right-4 absolute"
         >
@@ -177,4 +201,38 @@ const handleLogout = () => {
       </div>
     </div>
   </div>
+  <div
+  v-if="showDeleteConfirm"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white p-6 rounded shadow-md text-center max-w-sm w-full">
+    <h3 class="text-lg font-semibold mb-2 text-red-600">⚠️ Supprimer votre compte</h3>
+    <p class="text-sm text-gray-600 mb-4">Cette action est irréversible. Entrez votre mot de passe pour confirmer.</p>
+
+    <input
+      v-model="deletePassword"
+      type="password"
+      placeholder="Mot de passe"
+      class="w-full mb-4 px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+    />
+
+    <div class="text-red-600 text-sm mb-2" v-if="deleteError">{{ deleteError }}</div>
+
+    <div class="flex justify-center gap-4">
+      <button
+        @click="deleteAccount"
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+      >
+        Supprimer
+      </button>
+      <button
+        @click="showDeleteConfirm = false"
+        class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
+      >
+        Annuler
+      </button>
+    </div>
+  </div>
+</div>
+
 </template>
