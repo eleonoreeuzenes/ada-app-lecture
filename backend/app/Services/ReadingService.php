@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\Book;
 use App\Models\UserBook;
 use Illuminate\Support\Facades\Auth;
+use App\Services\BadgeService;
 
 class ReadingService
 {
@@ -20,12 +21,14 @@ class ReadingService
             'book_id' => $book->id,
             'status' => $status,
             'pages_read' => $pagesRead,
-            // 'started_at' => now(),
-            // 'finished_at' => $status === 'finished' ? now() : null,
+            'started_at' => now(),
+            'finished_at' => $status === 'finished' ? now() : null,
         ]);
 
         if ($status === 'finished') {
             $this->assignPoints($user->id, $book->total_pages);
+            app(BadgeService::class)->checkAll(Auth::user());
+
         }
 
         return $userBook;

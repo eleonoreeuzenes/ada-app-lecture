@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\UserBook;
 use Illuminate\Support\Facades\Auth;
 use App\Services\ReadingService;
+use App\Services\BadgeService;
 
 class UserBookController extends Controller
 {
@@ -33,11 +34,19 @@ class UserBookController extends Controller
         'book_id' => $validated['book_id'],
         'status' => $validated['status'],
         'pages_read' => $validated['pages_read'],
+        'started_at' => now(),
+        'finished_at' => $validated['status'] === 'finished' ? now() : null,
     ]);
+    if ($validated['status'] === 'finished') {
+        $readingService = new ReadingService();
+        $readingService->assignPoints(Auth::id(), $userBook->book->total_pages);
+        app(BadgeService::class)->checkAll(Auth::user());
+    }
 
     return response()->json([
         'message' => 'Lecture ajoutée ',
         'user_book' => $userBook,
+        'total_points' => Auth::user()->total_points,
     ], 201);
 }
 
@@ -113,7 +122,9 @@ public function update(Request $request, $id, ReadingService $readingService)
         $userBook->status = $validated['status'];
 
         if ($oldStatus !== 'finished' && $validated['status'] === 'finished') {
+            $userBook->finished_at = now();
             $readingService->assignPoints(Auth::id(), $userBook->book->total_pages);
+            app(BadgeService::class)->checkAll(Auth::user());
         }
     }
 
