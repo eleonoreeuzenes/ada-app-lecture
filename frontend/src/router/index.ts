@@ -7,6 +7,7 @@ import AccountView from '@/views/AccountView.vue'
 import AddBookView from '@/views/AddBookView.vue'
 import CreateBookView from '@/views/CreateBookView.vue'
 import SingleBookView from '../views/SingleBookView.vue'
+import BadgeView from '@/views/BadgeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,11 +44,15 @@ const router = createRouter({
     },
     {
       path: '/books/:id',
-      name: 'SingleBookView',
+      name: 'singlebook',
       component: SingleBookView,
       props: true
-    }
-    
+    },
+    {
+      path:'/badge',
+      name: 'badge',
+      component: BadgeView,
+    },
   ],
 })
 
