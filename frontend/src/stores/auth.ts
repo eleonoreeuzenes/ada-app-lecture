@@ -11,6 +11,32 @@ export const useAuthStore = defineStore('auth', {
   }),
 
   actions: {
+
+    async fetchUser() {
+      if (!this.token) return
+    
+      try {
+        console.log('Fetching user with token:', this.token)
+        const response = await api.get('/me', {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        console.log('User fetched:', response.data)
+        this.user = response.data
+        this.isAuthenticated = true
+      } catch (error) {
+        console.error('Erreur fetchUser:', error)
+        this.logout()
+      }
+    },
+    
+    async tryAutoLogin() {
+      if (this.token && !this.user) {
+        await this.fetchUser()
+      }
+    },
+    
     async register(email: string, username: string, password: string) {
         
       const response = await api.post('/register', {
@@ -72,4 +98,16 @@ export const useAuthStore = defineStore('auth', {
         router.push('/login') 
         }
   },
+  getters: {
+    userLevel: (state) => {
+      console.log('Calculating user level...')
+      console.log('User state:', state.user)
+      const points = state.user?.total_points || 0
+      if (points <= 50) return 'Débutant'
+      if (points <= 150) return 'Amateur'
+      if (points <= 300) return 'Confirmé'
+      return 'Expert'
+    }
+  }
+  
 })
