@@ -67,8 +67,8 @@ const handleLogout = () => {
 <template>
   <!-- Settings Icon -->
   <div class="relative">
-    <button @click="toggleSettings" class="text-gray-700 hover:text-gray-900">
-      <i class="fas fa-cog text-2xl"></i>
+    <button @click="toggleSettings" class="text-secondary-400 hover:text-gray-900">
+      <i class="fas fa-cog text-3xl lg:text-2xl"></i>
     </button>
 
     <!-- Full-Screen Overlay -->
