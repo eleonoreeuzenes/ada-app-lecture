@@ -2,7 +2,7 @@
 import { ref, computed, onBeforeUnmount} from 'vue';
 import { useBookStore } from '@/stores/book';
 import { useRouter } from 'vue-router';
-import BookComponent from '@/components/BookComponent.vue';
+import BookCardComponent from '@/components/BookCardComponent.vue';
 
 const searchQuery = ref('');
 const bookStore = useBookStore();
@@ -72,7 +72,7 @@ onBeforeUnmount(() => {
 
         <!-- List of books -->
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <BookComponent
+          <BookCardComponent
             v-for="book in bookStore.books"
             :key="book.id"
             :book="{ ...book, genre: book.genre.name, pages_read: 0 }"

@@ -16,9 +16,7 @@ export const useAuthStore = defineStore('auth', {
       if (!this.token) return
     
       try {
-        console.log('Fetching user with token:', this.token)
         const response = await api.get('/me')
-        console.log('User fetched:', response.data)
         this.user = response.data
         this.isAuthenticated = true
       } catch (error) {
@@ -52,28 +50,18 @@ export const useAuthStore = defineStore('auth', {
       this.user = response.data.user
       this.isAuthenticated = true
       localStorage.setItem('authToken', response.data.access_token)
-      console.log('Token after login:', this.token);
-      console.log('response:', response.data);
-      console.log('User after login:', this.user);
     },
 
     async updateUser(payload: { username: string; email: string; password?: string }) {
-      console.log('Payload being sent:', payload);
       const response = await api.patch('/me', payload);
       this.user = response.data.user;
     },
 
     async updatePassword(payload: { old_password: string; new_password: string }) {
-      console.log('Payload being sent:', payload);
       const response = await api.patch('/me/password', payload);
-      console.log('Password update response:', response.data);
-
     },
     
     async logout() {
-
-      console.log('Logging out...')
-      console.log('Token:', this.token)
       await api.post('/logout');
         this.token = null
         this.user = null
@@ -100,8 +88,6 @@ export const useAuthStore = defineStore('auth', {
 
   getters: {
     userLevel: (state) => {
-      console.log('Calculating user level...')
-      console.log('User state:', state.user)
       const points = state.user?.total_points || 0
       if (points <= 50) return 'Débutant'
       if (points <= 150) return 'Amateur'
@@ -109,5 +95,5 @@ export const useAuthStore = defineStore('auth', {
       return 'Expert'
     }
   }
-  
+
 })

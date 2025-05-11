@@ -7,9 +7,9 @@
       <div v-else>
         <div v-if="bookStore.userbooks.length === 0" class="text-tertiary-500 px-4 ">Aucun livre ajouté.</div>
         <div v-else class="space-y-8">
-          <BookSection title="À lire" :books="toReadBooks" />
-          <BookSection title="En cours" :books="inProgressBooks" />
-          <BookSection title="Terminés" :books="finishedBooks" />
+          <BookList title="À lire" :books="toReadBooks" />
+          <BookList title="En cours" :books="inProgressBooks" />
+          <BookList title="Terminés" :books="finishedBooks" />
         </div>
       </div>
     </main>
@@ -19,9 +19,8 @@
   <script setup lang="ts">
   import { onMounted, computed } from 'vue';
   import { useBookStore } from '@/stores/book';
-  import BookSection from '@/components/BookSectionComponent.vue'
+  import BookList from '@/components/BookListComponent.vue'
 
-  console.log('BookStore userbooks', useBookStore().userbooks)
   const bookStore = useBookStore();
   
   onMounted(async () => {

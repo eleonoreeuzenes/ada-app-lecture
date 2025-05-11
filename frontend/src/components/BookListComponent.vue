@@ -2,7 +2,7 @@
   <section>
     <h2 class="text-xl font-semibold mb-2 px-4">{{ title }}</h2>
     <div class="flex gap-4 overflow-x-auto md:flex-wrap md:overflow-visible pl-4">
-      <BookComponent
+      <BookCardComponent
         v-for="book in books"
         :key="book.id"
         :book="book"
@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import BookComponent from './BookComponent.vue';
+import BookCardComponent from './BookCardComponent.vue';
 
 defineProps<{
   title: string;
