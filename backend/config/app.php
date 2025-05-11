@@ -185,4 +185,15 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | API KEY
+    |--------------------------------------------------------------------------
+    |
+    | Set the API key for secure the application
+    |
+    */
+
+    'api_key' => env('API_KEY'),
+
 ];

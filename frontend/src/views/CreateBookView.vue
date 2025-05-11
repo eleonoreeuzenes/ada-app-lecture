@@ -54,7 +54,6 @@ onMounted(async () => {
 
 <template>
   <main class="container mx-auto px-4 py-8">
-    <!-- Message de succès ou d'erreur -->
     <div
       v-if="message"
       :class="{
@@ -68,7 +67,7 @@ onMounted(async () => {
 
     <h1 class="text-2xl font-bold mb-4">Créer un nouveau livre</h1>
     <form @submit.prevent="createBook" class="space-y-4">
-      <!-- Titre -->
+      <!-- Title -->
       <div>
         <label for="title" class="block text-sm font-medium text-gray-700">Titre</label>
         <input
@@ -80,7 +79,7 @@ onMounted(async () => {
         />
       </div>
 
-      <!-- Auteur -->
+      <!-- Author -->
       <div>
         <label for="author" class="block text-sm font-medium text-gray-700">Auteur</label>
         <input
@@ -92,7 +91,7 @@ onMounted(async () => {
         />
       </div>
 
-      <!-- Nombre total de pages -->
+      <!-- Number of pages -->
       <div>
         <label for="total_pages" class="block text-sm font-medium text-gray-700">Nombre total de pages</label>
         <input
@@ -120,7 +119,7 @@ onMounted(async () => {
         </select>
       </div>
 
-      <!-- Statut -->
+      <!-- Status -->
       <div>
         <label for="status" class="block text-sm font-medium text-gray-700">Statut</label>
         <select
@@ -136,7 +135,7 @@ onMounted(async () => {
         </select>
       </div>
 
-      <!-- Pages lues (affiché uniquement si le statut est "En cours") -->
+      <!-- Pages read -->
       <div v-if="showPagesRead">
         <label for="pages_read" class="block text-sm font-medium text-gray-700">Pages lues</label>
         <input

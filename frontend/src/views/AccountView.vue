@@ -1,8 +1,6 @@
 <template>
   <section class="bg-secondary-200 rounded-b-2xl py-6 px-6 md:px-96 relative">
-    <!-- Header : Nom + Badge + Réglages -->
     <div class="flex justify-between items-start">
-      <!-- Infos utilisateur -->
       <div>
         <h2 class="text-3xl font-bold">{{ user?.username }}</h2>
         <div class="flex items-center mt-1 text-sm bg-primary-700 text-primary-100 px-3 py-1 rounded-full w-fit">
@@ -10,12 +8,9 @@
           {{ userLevel }}
         </div>
       </div>
-
-      <!-- Icône settings -->
         <settings-component/>
     </div>
 
-    <!-- Barre de progression -->
     <div class="mt-4 lg:w-1/3">
       <div class="w-full bg-white h-2 rounded-full overflow-hidden">
         <div
@@ -28,7 +23,6 @@
       </p>
     </div>
 
-    <!-- Stats -->
     <div class="mt-4 flex justify-around items-center text-center lg:w-1/3">
       <div>
         <p class="text-2xl font-bold">{{ totalBooksRead }}</p>

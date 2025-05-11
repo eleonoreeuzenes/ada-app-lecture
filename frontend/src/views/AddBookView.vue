@@ -44,11 +44,9 @@ onBeforeUnmount(() => {
 
 <template>
   <main>
-    <!-- Full-Width Section -->
     <section class="w-full bg-secondary-200 py-6 rounded-b-3xl">
       <div class="container lg:w-1/3 mx-auto px-4">
         <h2 class="text-2xl font-bold text-gray-800 mb-2">Rechercher un livre </h2>
-        <!-- Search Bar -->
         <div class="relative w-full max-w-lg">
           <input
             type="text"
@@ -67,10 +65,7 @@ onBeforeUnmount(() => {
       <div v-if="bookStore.isLoading" class="text-tertiary-500">Chargement...</div>
       <div v-else-if="bookStore.error" class="text-red-500">{{ bookStore.error }}</div>
       <div v-else>
-        <!-- Message if no results -->
         <div v-if="bookStore.books.length === 0" class="text-tertiary-500">Aucun résultat</div>
-
-        <!-- List of books -->
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <BookCardComponent
             v-for="book in bookStore.books"
@@ -81,8 +76,6 @@ onBeforeUnmount(() => {
           />
         </div>
       </div>
-
-      <!-- Button to create a new book -->
       <div class="mt-4">
         <button
           @click="goToCreateBook"
