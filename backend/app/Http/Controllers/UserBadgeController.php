@@ -12,7 +12,6 @@ class UserBadgeController extends Controller
     {
         $user = Auth::user();
 
-        // On utilise la relation belongsToMany avec pivot
         $badges = $user->badges->map(function ($badge) {
             return [
             'id' => $badge->id,

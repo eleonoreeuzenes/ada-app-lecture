@@ -31,7 +31,7 @@ class BookController extends Controller
 public function search(Request $request)
 {
     $query = $request->input('title');
-
+    //TODO: make it more efficient
     $books = Book::where('title', 'ILIKE', "%{$query}%")
         ->with('genre')
         ->limit(10)
