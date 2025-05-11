@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import userBooksComponent from '@/components/UserBooksComponent.vue';
+import HomeBooklistsComponent from '@/components/HomeBookListsComponent.vue';
 </script>
 
 <template>
   <main>
-    <user-books-component />
+    <HomeBooklistsComponent />
   </main>
 </template>

@@ -83,7 +83,7 @@ public function storeFull(Request $request, ReadingService $readingService)
     }
 
     return response()->json([
-        'message' => 'Livre et lecture ajoutés avec succès ✅',
+        'message' => 'Livre et lecture ajoutés avec succès ',
         'book' => $book,
         'user_book' => $userBook,
         'total_points' => Auth::user()->total_points,
@@ -94,7 +94,7 @@ public function getUserBooks()
 {
     $user = Auth::user();
 
-    $userBooks = UserBook::with('book.genre') // Inclure les relations avec les livres et les genres
+    $userBooks = UserBook::with('book.genre') 
         ->where('user_id', $user->id)
         ->get();
 

@@ -179,19 +179,21 @@ const deleteAccount = async () => {
             Mettre à jour le mot de passe
           </button>
         </div>
-
+        <!-- Logout button -->
         <button
           @click="handleLogout"
           class="text-primary-800 hover:text-primary-600 text-lg font-bold mt-2"
         >
           Se déconnecter
         </button>
+        <!-- Delete Account button -->
         <button
           @click="confirmDelete"
           class="text-red-600 font-bold mt-4 text-lg hover:text-red-800"
         >
           Supprimer mon compte
         </button>
+        <!-- Close settings-->
         <button
           @click="toggleSettings"
           class="text-primary-600 text-2xl top-4 right-4 absolute"
@@ -201,6 +203,7 @@ const deleteAccount = async () => {
       </div>
     </div>
   </div>
+  <!-- Delete Account form -->
   <div
   v-if="showDeleteConfirm"
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"

@@ -43,10 +43,11 @@ services:
       dockerfile: Dockerfile
     container_name: vue_frontend
     ports:
-      - "8082:8082"
+      - "5173:5173"
     volumes:
       - ./frontend:/app
-    command: npm run dev
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
 
 volumes:
   postgres_data:

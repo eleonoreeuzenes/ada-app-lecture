@@ -20,32 +20,32 @@ use App\Http\Controllers\UserBadgeController;
 |
 */
 
-Route::get('/test', function (Request $request) {
-    return response()->json(['message' => 'Hello, World!']);
-});
-Route::post('/register', [AuthenticationController::class, 'register']);
-Route::post('/login', [AuthenticationController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthenticationController::class, 'logout']);
-    Route::patch('/me', [UserController::class, 'updateUser']);
-    Route::patch('/me/password', [AuthenticationController::class, 'resetPassword']);
-    Route::get('/me', [UserController::class, 'getCurrentUser']);
-    Route::get('/me/badges', [UserBadgeController::class, 'index']);
-    Route::delete('/me', [UserController::class, 'deleteUser']);
+Route::middleware('api_key')->group(
+    function () {
+    Route::post('/register', [AuthenticationController::class, 'register']);
+    Route::post('/login', [AuthenticationController::class, 'login']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthenticationController::class, 'logout']);
+        Route::patch('/me', [UserController::class, 'updateUser']);
+        Route::patch('/me/password', [AuthenticationController::class, 'resetPassword']);
+        Route::get('/me', [UserController::class, 'getCurrentUser']);
+        Route::get('/me/badges', [UserBadgeController::class, 'index']);
+        Route::delete('/me', [UserController::class, 'deleteUser']);
 
-    //books
-    Route::post('/books', [BookController::class, 'store']);
-    Route::get('/books/search', [BookController::class, 'search']);
+        //books
+        Route::post('/books', [BookController::class, 'store']);
+        Route::get('/books/search', [BookController::class, 'search']);
 
-    // user library
-    Route::post('/user-books', [UserBookController::class, 'store']);
-    Route::post('/user-books/full', [UserBookController::class, 'storeFull']);
-    Route::get('/user-books', [UserBookController::class, 'getUserBooks']);
-    Route::patch('/user-books/{userBook}', [UserBookController::class, 'update']);
+        // user library
+        Route::post('/user-books', [UserBookController::class, 'store']);
+        Route::post('/user-books/full', [UserBookController::class, 'storeFull']);
+        Route::get('/user-books', [UserBookController::class, 'getUserBooks']);
+        Route::patch('/user-books/{userBook}', [UserBookController::class, 'update']);
 
-    //genres
-    Route::post('/genres', [GenreController::class, 'store']);
-    Route::get('/genres', [GenreController::class, 'index']);
+        //genres
+        Route::post('/genres', [GenreController::class, 'store']);
+        Route::get('/genres', [GenreController::class, 'index']);
 
-    // Add other protected routes here
+        // Add other protected routes here
+    });
 });

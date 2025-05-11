@@ -11,4 +11,9 @@ if (token) {
   api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
+const apiKey = import.meta.env.VITE_API_KEY;
+if (apiKey) {
+  api.defaults.headers.common['x-api-key'] = apiKey;
+}
+
 export default api
