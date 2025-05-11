@@ -91,7 +91,7 @@ Cela initialise la base et crée un compte test `booklad@example.com` (mdp : `Pa
 | Backend API | [http://localhost:8000/api](http://localhost:8000/api) |
 | Adminer     | [http://localhost:8080](http://localhost:8080)         |
 
-
+note: en local privilégier un npm run dev hors docker pour vue
 
 ---
 

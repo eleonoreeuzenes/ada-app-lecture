@@ -1,0 +1,62 @@
+@startuml
+!theme plain
+
+entity "users" as U {
+  *id : int
+  name : string
+  email : string
+  password : string
+  total_points : int
+}
+
+entity "books" as B {
+  *id : int
+  title : string
+  author : string
+  total_pages : int
+}
+
+entity "user_books" as UB {
+  *id : int
+  user_id : int
+  book_id : int
+  status : enum <<to_read, in_progress, finished>>
+  pages_read : int
+  started_at : datetime
+  finished_at : datetime
+}
+
+entity "badges" as BA {
+  *id : int
+  name : string
+  description : string
+  criteria_type : string
+  criteria_value : string
+}
+
+entity "user_badges" as UBAD {
+  *id : int
+  user_id : int
+  badge_id : int
+  unlocked_at : datetime
+}
+
+entity "genres" as G {
+  *id : int
+  name : string
+}
+
+entity "book_genre" as BG {
+  *id : int
+  book_id : int
+  genre_id : int
+}
+
+U ||--o{ UB : "has"
+B ||--o{ UB : "is read in"
+UBAD }o--|| U : "belongs to"
+UBAD }o--|| BA : "unlocks"
+B ||--o{ BG : "tagged with"
+G ||--o{ BG : "is used in"
+
+@enduml

@@ -6,7 +6,7 @@
       <div v-else-if="bookStore.error" class="text-red-500 px-4">{{ bookStore.error }}</div>
       <div v-else>
         <div v-if="bookStore.userbooks.length === 0" class="text-tertiary-500 px-4 ">Aucun livre ajouté.</div>
-        <div v-else class="space-y-8">
+        <div v-else class="space-y-4">
           <BookList title="À lire" :books="toReadBooks" />
           <BookList title="En cours" :books="inProgressBooks" />
           <BookList title="Terminés" :books="finishedBooks" />

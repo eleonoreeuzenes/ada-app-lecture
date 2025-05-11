@@ -21,7 +21,7 @@ const getBadgeImage = (badge: { name: string; category: string }) => {
 </script>
 
 <template>
-  <main class="container mx-auto px-4 py-8">
+  <main class="container mx-auto px-4 py-8 mb-24">
     <h1 class="text-2xl font-bold mb-6">
       Tous mes Badges
       <span v-if="!isLoading">({{ totalBadges }})</span>

@@ -82,8 +82,6 @@ setup() {
   const authStore = useAuthStore();
   const router = useRouter();
 
-  const passwordRegex = /^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*$/;
-
   const handleLogin = async () => {
     if (isSubmitting.value) return;
     isSubmitting.value = true;
