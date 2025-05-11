@@ -1,0 +1,28 @@
+@startuml
+!theme plain
+
+actor User
+participant "VueJS (Frontend)" as Front
+participant "Laravel API" as API
+database "PostgreSQL" as DB
+
+== Login Process ==
+
+User -> Front : Enters email + password
+Front -> API : POST /login (email, password)
+API -> DB : Validate credentials
+DB --> API : User found
+
+API -> API : Generate Sanctum token
+API --> Front : Return access_token + user data
+Front -> Front : Store token in localStorage
+Front -> Front : Update authStore.user
+
+== Authenticated Request ==
+
+Front -> API : GET /me\n(Authorization: Bearer token)
+API -> DB : Authenticate token via Sanctum
+DB --> API : Valid user
+API --> Front : Return user data
+
+@enduml

@@ -7,11 +7,13 @@ const api = axios.create({
 })
 
 const token = localStorage.getItem('authToken')
+console.log('Token:', token)
 if (token) {
   api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
 const apiKey = import.meta.env.VITE_API_KEY;
+console.log('API Key:', apiKey)
 if (apiKey) {
   api.defaults.headers.common['x-api-key'] = apiKey;
 }

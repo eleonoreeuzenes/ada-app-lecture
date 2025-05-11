@@ -33,7 +33,6 @@ const route = useRoute();
   </div>
 </div>
   <RouterView />
-
   <div v-if="!['register', 'login'].includes((route.name as string) ?? '')" class="fixed lg:hidden bottom-0 left-0 right-0 bg-tertiary-950 border-t border-gray-200 py-1">
     <div class="flex justify-around">
       <router-link

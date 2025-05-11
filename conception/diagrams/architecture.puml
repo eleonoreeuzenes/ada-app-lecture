@@ -1,0 +1,48 @@
+@startuml
+!theme plain
+
+cloud "User" as User
+
+package "Frontend (Vue 3 + Pinia + Vite)" {
+  component "App.vue"
+  component "Pages\n(Home, Search, Profile)"
+  component "AuthStore"
+  component "BookStore"
+}
+
+package "Backend (Laravel API)" {
+  component "Controllers"
+  component "Routes API"
+  component "Sanctum Auth"
+  component "BadgeService"
+  component "Models (Eloquent)"
+}
+
+database "PostgreSQL" as DB
+
+node "Docker" {
+  [frontend]
+  [backend]
+  [db]
+  [adminer]
+}
+
+User --> "App.vue" : HTTP Requests
+"App.vue" --> "AuthStore" : Calls login(), logout()
+"App.vue" --> "BookStore" : Fetch books, update status
+
+"AuthStore" --> "Routes API" : POST /login\nGET /me
+"BookStore" --> "Routes API" : GET /user-books\nPATCH /user-books/:id
+
+"Routes API" --> "Sanctum Auth"
+"Routes API" --> "Controllers"
+"Controllers" --> "BadgeService" : (e.g. checkAll)
+"Controllers" --> "Models (Eloquent)" : DB queries
+"Models (Eloquent)" --> DB : Read / Write
+
+[frontend] --> "App.vue"
+[backend] --> "Routes API"
+[db] --> DB
+[adminer] --> DB
+
+@enduml
