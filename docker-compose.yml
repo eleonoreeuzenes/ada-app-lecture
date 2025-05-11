@@ -28,14 +28,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # Adminer
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: always
-    ports:
-      - "8080:8080"
-
   # Frontend Vue 3
   frontend:
     build:

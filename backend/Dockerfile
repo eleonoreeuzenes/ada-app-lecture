@@ -1,20 +1,23 @@
-#Backend/Dockerfile
 FROM php:8.2-fpm
 
-# Install system deps
-RUN apt-get update && apt-get install -y \
-    git curl libpq-dev unzip libzip-dev zip \
-    && docker-php-ext-install pdo_pgsql zip
+RUN apt-get update \
+  && apt-get install -y \
+  git \
+  curl \
+  libpng-dev \
+  libonig-dev \
+  libxml2-dev \
+  zip \
+  unzip \
+  zlib1g-dev \
+  libpq-dev \
+  libzip-dev
 
-# Install Composer
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+  && docker-php-ext-install pdo pdo_pgsql pgsql zip bcmath gd
+
+WORKDIR /var/www/
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www
 
-# Copy files
-COPY . .
-
-# Install Laravel deps
-RUN composer install
-
-CMD php artisan serve --host=0.0.0.0 --port=8000
