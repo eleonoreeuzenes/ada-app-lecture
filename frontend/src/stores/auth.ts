@@ -17,11 +17,7 @@ export const useAuthStore = defineStore('auth', {
     
       try {
         console.log('Fetching user with token:', this.token)
-        const response = await api.get('/me', {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
+        const response = await api.get('/me')
         console.log('User fetched:', response.data)
         this.user = response.data
         this.isAuthenticated = true
@@ -63,21 +59,13 @@ export const useAuthStore = defineStore('auth', {
 
     async updateUser(payload: { username: string; email: string; password?: string }) {
       console.log('Payload being sent:', payload);
-      const response = await api.patch('/me', payload, {
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-        },
-      });
-      this.user = response.data.user; // Update the user in the store
+      const response = await api.patch('/me', payload);
+      this.user = response.data.user;
     },
 
     async updatePassword(payload: { old_password: string; new_password: string }) {
       console.log('Payload being sent:', payload);
-      const response = await api.patch('/me/password', payload, {
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-        },
-      });
+      const response = await api.patch('/me/password', payload);
       console.log('Password update response:', response.data);
 
     },
@@ -86,11 +74,7 @@ export const useAuthStore = defineStore('auth', {
 
       console.log('Logging out...')
       console.log('Token:', this.token)
-      await api.post('/logout', {}, {
-        headers: {
-          Authorization: `Bearer ${this.token}`, 
-        },
-      });
+      await api.post('/logout');
         this.token = null
         this.user = null
         this.isAuthenticated = false
@@ -103,7 +87,6 @@ export const useAuthStore = defineStore('auth', {
           if (!token) throw new Error('Not authenticated')
         
           await api.delete('/me', {
-            headers: { Authorization: `Bearer ${token}` },
             data: { password }, 
           })
         

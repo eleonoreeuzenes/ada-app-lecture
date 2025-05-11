@@ -36,11 +36,7 @@ export const useBookStore = defineStore('book', {
           throw new Error('No authentication token found.');
         }
         console.log('Token:', token);
-        const response = await api.get('/genres', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.get('/genres');
         this.genres = response.data;
         console.log('Genres:', this.genres);
       } catch (error: any) {
@@ -68,11 +64,7 @@ export const useBookStore = defineStore('book', {
           throw new Error('No authentication token found.');
         }
 
-        await api.post('/user-books/full', bookData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await api.post('/user-books/full', bookData);
         this.fetchUserBooks();
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Erreur lors de la création du livre.';
@@ -85,19 +77,15 @@ export const useBookStore = defineStore('book', {
       this.error = null;
 
       try {
-        const token = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+        const token = localStorage.getItem('authToken'); 
         if (!token) {
           throw new Error('No authentication token found.');
         }
 
         const response = await api.get('/books/search', {
-          params: { title }, // Pass the search query as the `title` parameter
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-          },
+          params: { title }, 
         });
         
-        // Update the books state with the API response
         this.books = response.data.map((book: any) => ({
           id: book.id,
           title: book.title,
@@ -125,11 +113,7 @@ export const useBookStore = defineStore('book', {
           throw new Error('No authentication token found.');
         }
 
-        const response = await api.get('/user-books', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.get('/user-books');
 
         this.userbooks = response.data.map((userBook: any) => ({
           id: userBook.id,
@@ -163,10 +147,6 @@ export const useBookStore = defineStore('book', {
         const response = await api.patch(`/user-books/${updatedBook.id}`, {
           status: updatedBook.status,
           pages_read: updatedBook.pages_read,
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         });
     
         const bookIndex = this.userbooks.findIndex((book) => book.id === updatedBook.id);
@@ -193,11 +173,7 @@ export const useBookStore = defineStore('book', {
           throw new Error('No authentication token found.');
         }
     
-        await api.post('/user-books', payload, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await api.post('/user-books', payload);
     
         // Optionally, fetch the user's library again to update the UI
         await this.fetchUserBooks();
