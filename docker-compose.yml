@@ -62,6 +62,7 @@ services:
     volumes: 
         - ./:/var/www
         - ./backend/nginx/conf:/etc/nginx/conf.d
+        - /etc/letsencrypt:/etc/letsencrypt 
     networks: 
         - app-network
 
