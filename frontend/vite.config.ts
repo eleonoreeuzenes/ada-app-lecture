@@ -10,7 +10,12 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
-  // Configuration pour la production
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    },
+  },
+    // Configuration pour la production
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
