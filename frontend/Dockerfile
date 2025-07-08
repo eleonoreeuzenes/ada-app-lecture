@@ -1,19 +1,15 @@
-# frontend/Dockerfile
-FROM node:18
+# Multi-stage build pour la production
+FROM node:18-alpine AS builder
 
 WORKDIR /app
-
-# Copier uniquement les fichiers nécessaires pour installer les dépendances
 COPY package*.json ./
-
-# Nettoyer le cache npm et installer les dépendances
-RUN npm cache clean --force && npm install
-
-# Copier le reste des fichiers
+RUN npm ci --only=production
 COPY . .
+RUN npm run build
 
-# Exposer le port pour le serveur de développement
-EXPOSE 5173
-
-# Lancer le serveur de développement
-CMD ["npm", "run", "dev", "--", "--host"]
+# Production stage avec Nginx
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
