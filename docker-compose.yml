@@ -1,9 +1,5 @@
 version: "3.8"
 
-networks:
-  app-network:
-    driver: bridge
-
 services:
   # Laravel (PHP + Artisan + Composer)
   backend:
@@ -11,31 +7,50 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: laravel_backend
-    restart: unless-stopped
-    ports:
-      - "8000:8000"
     volumes:
       - ./backend:/var/www
     depends_on:
       - db
-    networks: 
-      - app-network
+    networks:
+      - traefik
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.backend.rule=Host(`booklad.eleonoreeuzenes.fr`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
 
   # PostgreSQL
   db:
     image: postgres:15
     container_name: postgres_db
-    restart: unless-stopped
-    ports:
-      - "5432:5432"
+    restart: always
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks: 
-      - app-network
+    networks:
+      - internal
+
+  # Adminer
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    networks:
+      - traefik
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.adminer.rule=Host(`adminer.booklad.eleonoreeuzenes.fr`)"
+      - "traefik.http.routers.adminer.entrypoints=websecure"
+      - "traefik.http.routers.adminer.tls.certresolver=letsencrypt"
+      - "traefik.http.services.adminer.loadbalancer.server.port=8080"
 
   # Frontend Vue 3
   frontend:
@@ -43,28 +58,25 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: vue_frontend
-    ports:
-      - "5173:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
     command: npm run dev -- --host 0.0.0.0
-    networks: 
-      - app-network
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    restart: unless-stopped
-    tty: true
-    ports: 
-        - 8080:80
-    volumes: 
-        - ./:/var/www
-        - ./backend/nginx/conf:/etc/nginx/conf.d
-        - /etc/letsencrypt:/etc/letsencrypt 
-    networks: 
-        - app-network
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.frontend.rule=Host(`booklad.eleonoreeuzenes.fr`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=5173"
 
 volumes:
   postgres_data:
+
+networks:
+  traefik:
+    external: true
+  internal:
+    driver: bridge
